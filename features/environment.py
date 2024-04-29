@@ -330,7 +330,7 @@ class PatroniController(AbstractController):
             pidfile = os.path.join(self._data_dir, 'postmaster.pid')
             if not os.path.exists(pidfile):
                 return None
-            return int(open(pidfile).readline().strip())
+            return int(open(pidfile).readline(5_000_000).strip())
         except Exception:
             return None
 

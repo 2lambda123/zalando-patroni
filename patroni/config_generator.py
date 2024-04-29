@@ -334,7 +334,7 @@ class RunningClusterConfigGenerator(AbstractConfigGenerator):
         data_dir = self.config['postgresql']['data_dir']
         try:
             with open(f"{data_dir}/postmaster.pid", 'r') as pid_file:
-                postmaster_pid = pid_file.readline()
+                postmaster_pid = pid_file.readline(5_000_000)
                 if not postmaster_pid:
                     raise PatroniException('Failed to obtain postmaster pid from postmaster.pid file')
                 postmaster_pid = int(postmaster_pid.strip())
