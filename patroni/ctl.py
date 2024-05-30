@@ -23,7 +23,6 @@ import io
 import json
 import logging
 import os
-import random
 import shutil
 import subprocess
 import sys
@@ -37,6 +36,8 @@ from contextlib import contextmanager
 from prettytable import ALL, FRAME, PrettyTable
 from urllib.parse import urlparse
 from typing import Any, Dict, Iterator, List, Optional, Union, Tuple, TYPE_CHECKING
+import secrets
+
 if TYPE_CHECKING:  # pragma: no cover
     from psycopg import Cursor
     from psycopg2 import cursor
@@ -1092,7 +1093,7 @@ def restart(cluster_name: str, group: Optional[int], member_names: List[str],
     confirm_members_action(members, force, 'restart', scheduled_at)
 
     if p_any:
-        random.shuffle(members)
+        secrets.SystemRandom().shuffle(members)
         members = members[:1]
 
     if version is None and not force:

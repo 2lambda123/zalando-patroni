@@ -1,6 +1,5 @@
 import json
 import logging
-import random
 import time
 
 from typing import Any, Callable, Dict, List, Union
@@ -10,6 +9,7 @@ from .zookeeper import ZooKeeper
 from ..postgresql.mpp import AbstractMPP
 from ..request import get as requests_get
 from ..utils import uri
+import secrets
 
 logger = logging.getLogger(__name__)
 
@@ -51,7 +51,7 @@ class ExhibitorEnsembleProvider(object):
         return False
 
     def _query_exhibitors(self, exhibitors: List[str]) -> Union[Dict[str, Any], Any]:
-        random.shuffle(exhibitors)
+        secrets.SystemRandom().shuffle(exhibitors)
         for host in exhibitors:
             try:
                 response = requests_get(uri('http', (host, self._exhibitor_port), self._uri_path), timeout=self.TIMEOUT)

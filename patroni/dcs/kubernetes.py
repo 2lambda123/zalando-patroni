@@ -5,7 +5,6 @@ import functools
 import json
 import logging
 import os
-import random
 import socket
 import tempfile
 import time
@@ -25,6 +24,8 @@ from ..exceptions import DCSError
 from ..postgresql.mpp import AbstractMPP
 from ..utils import deep_compare, iter_response_objects, keepalive_socket_options, \
     Retry, RetryFailedError, tzutc, uri, USER_AGENT
+import secrets
+
 if TYPE_CHECKING:  # pragma: no cover
     from ..config import Config
 
@@ -295,7 +296,7 @@ class K8sClient(object):
                             if port.name == 'https' and port.protocol == 'TCP':
                                 addresses = [uri('https', (a.ip, port.port)) for a in subset.addresses]
                                 if addresses:
-                                    random.shuffle(addresses)
+                                    secrets.SystemRandom().shuffle(addresses)
                                     return addresses
                 except Exception as e:
                     if isinstance(e, k8s_client.rest.ApiException) and e.status == 403:

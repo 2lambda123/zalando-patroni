@@ -7,7 +7,6 @@ import re
 import time
 from collections import defaultdict
 from copy import deepcopy
-from random import randint
 from threading import Event, Lock
 from typing import Any, Callable, Collection, Dict, Iterator, List, \
     NamedTuple, Optional, Tuple, Type, TYPE_CHECKING, Union
@@ -21,6 +20,7 @@ from ..exceptions import PatroniFatalException
 from ..utils import deep_compare, uri
 from ..tags import Tags
 from ..utils import parse_int
+import secrets
 
 if TYPE_CHECKING:  # pragma: no cover
     from ..config import Config
@@ -903,7 +903,7 @@ class Cluster(NamedTuple('Cluster',
         """
         exclude = [exclude_name] + ([self.leader.name] if self.leader else [])
         candidates = [m for m in self.members if m.clonefrom and m.is_running and m.name not in exclude]
-        return candidates[randint(0, len(candidates) - 1)] if candidates else self.leader
+        return candidates[secrets.SystemRandom().randint(0, len(candidates) - 1)] if candidates else self.leader
 
     @staticmethod
     def is_physical_slot(value: Union[Any, Dict[str, Any]]) -> bool:

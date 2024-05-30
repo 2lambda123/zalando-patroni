@@ -14,7 +14,6 @@ import itertools
 import logging
 import os
 import platform
-import random
 import re
 import socket
 import subprocess
@@ -32,6 +31,7 @@ from urllib3.response import HTTPResponse
 
 from .exceptions import PatroniException
 from .version import __version__
+import secrets
 
 if TYPE_CHECKING:  # pragma: no cover
     from .dcs import Cluster
@@ -698,7 +698,7 @@ class Retry(object):
 
         It is based on the current delay plus a number up to ``max_jitter``.
         """
-        return self._cur_delay + (random.randint(0, self.max_jitter) / 100.0)
+        return self._cur_delay + (secrets.SystemRandom().randint(0, self.max_jitter) / 100.0)
 
     def update_delay(self) -> None:
         """Set next cycle delay.

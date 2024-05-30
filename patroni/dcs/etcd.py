@@ -5,7 +5,6 @@ import json
 import logging
 import os
 import urllib3.util.connection
-import random
 import socket
 import time
 
@@ -27,6 +26,8 @@ from ..exceptions import DCSError
 from ..postgresql.mpp import AbstractMPP
 from ..request import get as requests_get
 from ..utils import Retry, RetryFailedError, split_host_port, uri, USER_AGENT
+import secrets
+
 if TYPE_CHECKING:  # pragma: no cover
     from ..config import Config
 
@@ -190,7 +191,7 @@ class AbstractEtcdClientWithFailover(abc.ABC, etcd.Client):
                 machines = list(set(self._get_members(base_uri, **kwargs)))
                 logger.debug("Retrieved list of machines: %s", machines)
                 if machines:
-                    random.shuffle(machines)
+                    secrets.SystemRandom().shuffle(machines)
                     if not self._use_proxies:
                         self._update_dns_cache(self._dns_resolver.resolve_async, machines)
                     return machines
